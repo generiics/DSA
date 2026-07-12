@@ -15,23 +15,29 @@
  */
 class Solution {
     int ans=0;
-    public int longestZigZag(TreeNode root) {
-        dfs(root, true,0);
-        return ans;
-        
+    class Pair{
+        int leftzig;
+        int rightzig;
+        Pair(int leftzig,int rightzig){
+            this.leftzig=leftzig;
+            this.rightzig=rightzig;
+        }
     }
-    private void dfs(TreeNode root,boolean right,int steps){
+    public int longestZigZag(TreeNode root) {
+        dfs(root);
+        return ans;
+    }
+    private Pair dfs(TreeNode root){
         if(root==null){
-            return;
+            return new Pair(-1, -1);
         }
-        ans=Math.max(ans,steps);
-        if(right){
-            dfs(root.right,false,steps+1);
-            dfs(root.left,true,1);
-        }else{
-            dfs(root.left,true,steps+1);
-            dfs(root.right,false,1);
-        }
+        Pair left=dfs(root.left);
+        Pair right=dfs(root.right);
 
+       int leftzig=left.rightzig+1;
+       int rightzig= right.leftzig+1;
+
+       ans=Math.max(ans,Math.max(leftzig,rightzig));
+       return new Pair(leftzig,rightzig);
     }
 }
