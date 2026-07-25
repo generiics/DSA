@@ -1,31 +1,39 @@
+import java.util.Stack;
+import java.util.HashMap;
+import java.util.function.BiFunction;
+
 class Solution {
-    public int operation(int a,int b,String token){
-        if(token.equals("+")){
-            return a+b;
-        }
-        if(token.equals("-")){
-            return a-b;
-        }
-        if(token.equals("*")){
-            return a*b;
-        }
-        if(token.equals("/")){
-            return a/b;
-        }
-        return 0;
-    }
+
     public int evalRPN(String[] tokens) {
-        Stack<Integer> stack=new Stack<>();
-        for(String token:tokens){
-            if(token.equals("+") || token.equals("-") || token.equals("*") || token.equals("/")){
-                int b=stack.pop();
-                int a=stack.pop();
-                int  result=operation(a,b,token);
-                stack.push(result);
-            }else{
-                stack.push(Integer.parseInt(token));
+
+        Stack<Integer> st = new Stack<>();
+
+        HashMap<String, BiFunction<Integer, Integer, Integer>> mp = new HashMap<>();
+
+        mp.put("+", (a, b) -> a + b);
+        mp.put("-", (a, b) -> a - b);
+        mp.put("*", (a, b) -> a * b);
+        mp.put("/", (a, b) -> a / b);
+
+        for (String token : tokens) {
+
+            if (token.equals("+") || token.equals("-") ||
+                token.equals("*") || token.equals("/")) {
+
+                // Top 2 elements pop karke operation karo
+                int b = st.pop();
+                int a = st.pop();
+
+                int result = mp.get(token).apply(a, b);
+
+                st.push(result);
+
+            } else {
+
+                st.push(Integer.parseInt(token));
             }
         }
-        return stack.peek();
+
+        return st.peek();
     }
 }
