@@ -1,15 +1,29 @@
 class Solution {
     public char solve(char op,List<Character> value){
-        if (op == '!') 
-            return value.get(0) == 't' ? 'f' : 't';
-
-        if (op == '&') 
-            return value.stream().anyMatch(ch -> ch == 'f') ? 'f' : 't';
-
-        if (op == '|') 
-            return value.stream().anyMatch(ch -> ch == 't') ? 't' : 'f';
-
-        return 't'; 
+          if (op == '!') {
+        if (value.get(0) == 't') {
+            return 'f';
+        } else {
+            return 't';
+        }
+    }
+    if (op == '&') {
+        for (char ch : value) {
+            if (ch == 'f') {
+                return 'f';
+            }
+        }
+        return 't';
+    }
+    if (op == '|') {
+        for (char ch : value) {
+            if (ch == 't') {
+                return 't';
+            }
+        }
+        return 'f';
+    }
+    return 't';
     }
     
     public boolean parseBoolExpr(String expression) {
